@@ -1,0 +1,53 @@
+#include <reg51.h>
+
+#define LCD P2  
+
+sbit RS = P3^2;  
+sbit RW = P3^1;  
+sbit EN = P3^3;  
+
+void delay(unsigned int time) {
+    unsigned int i, j;
+    for(i = 0; i < time; i++)
+        for(j = 0; j < 1275; j++);
+}
+
+void LCD_command(unsigned char cmd) {
+    LCD = cmd;
+    RS = 0;     
+    RW = 0;     
+    EN = 1;
+    delay(1);
+    EN = 0;
+    delay(5);
+}
+
+void LCD_data(unsigned char dat) {
+    LCD = dat;
+    RS = 1;     // Data mode
+    RW = 0;     // Write mode
+    EN = 1;
+    delay(1);
+    EN = 0;
+    delay(5);
+}
+
+void LCD_init() {
+    LCD_command(0x38);  // 16x2, 5x7 matrix, 8-bit mode
+    LCD_command(0x0C);  // Display ON, Cursor OFF
+    LCD_command(0x01);  // Clear display
+    LCD_command(0x06);  // Auto increment cursor
+    LCD_command(0x80);  // Cursor at home position
+}
+
+void LCD_string(char *str) {
+    while(*str) {
+        LCD_data(*str++);
+    }
+}
+
+void main() {
+    LCD_init();
+    LCD_string("Hello 8051!");
+    while(1);
+}
