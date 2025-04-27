@@ -1,0 +1,14 @@
+#include<reg51.h>
+sbit wave = P1^0;
+void timer0_isr() interrupt 1 {
+wave =~ wave;
+TF0 = 0;
+}
+void main(){
+TMOD = 0x01;
+TH0 = 0xDB;
+TL0 = 0xFF;
+IE = 0x82;
+TR0 = 1;
+while(1);
+}
