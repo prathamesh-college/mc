@@ -1,0 +1,14 @@
+#include <reg51.h> // Include header file for 8051 microcontroller
+#define SWITCH_PORT P3 // Define port for switch input
+#define LED_PORT P2 // Define port for LED output
+int main() {
+P3 = 0xFF; // Configure Port 3 as input (all pins high)
+P2 = 0x00; // Initialize Port 2 (LEDs off)
+while (1) { // Infinite loop
+if ((P3 & 0x08) == 0x08) { // Check if switch (P3.3) is not pressed
+P2 = 0xAA; // Set LEDs in alternating pattern (10101010)
+} else {
+P2 = 0x55; // Set LEDs in opposite pattern (01010101)
+}
+}
+}
